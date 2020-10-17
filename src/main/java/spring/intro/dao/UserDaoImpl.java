@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
+import spring.intro.exception.DataProcessingException;
 import spring.intro.model.User;
 
 @Repository
@@ -27,7 +28,7 @@ public class UserDaoImpl implements UserDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't insert to DB user: " + user);
+            throw new DataProcessingException("Can't insert to DB user: " + user, e);
         } finally {
             if (session != null) {
                 session.close();
