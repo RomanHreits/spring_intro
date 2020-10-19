@@ -6,7 +6,6 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import spring.intro.model.User;
 
@@ -40,4 +39,3 @@ public class AppConfig {
         return sessionFactory;
     }
 }
- 
