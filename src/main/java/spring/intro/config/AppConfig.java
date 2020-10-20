@@ -18,7 +18,6 @@ import spring.intro.model.User;
         "spring.intro.service"
 })
 public class AppConfig {
-
     private final Environment environment;
 
     public AppConfig(Environment environment) {

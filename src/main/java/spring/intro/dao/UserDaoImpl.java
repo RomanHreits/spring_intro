@@ -16,7 +16,7 @@ public class UserDaoImpl implements UserDao {
         this.sessionFactory = sessionFactory;
     }
 
-    public void add(User user) {
+    public User add(User user) {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -24,6 +24,7 @@ public class UserDaoImpl implements UserDao {
             transaction = session.beginTransaction();
             session.save(user);
             transaction.commit();
+            return user;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -41,6 +42,15 @@ public class UserDaoImpl implements UserDao {
             return session.createQuery("from User", User.class).getResultList();
         } catch (Exception e) {
             throw new DataProcessingException("Can't get users from DB!", e);
+        }
+    }
+
+    @Override
+    public User findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(User.class, id);
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't find in DB user with id: " + id, e);
         }
     }
 }
