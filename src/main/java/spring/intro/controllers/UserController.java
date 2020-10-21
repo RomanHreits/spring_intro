@@ -1,7 +1,7 @@
 package spring.intro.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +15,6 @@ import spring.intro.service.UserService;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-
     private final ModelMapper mapper;
 
     public UserController(UserService userService, ModelMapper mapper) {
@@ -25,27 +24,20 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserResponseDto get(@PathVariable("userId") Long userId) {
-        return convertToDto(userService.getById(userId));
+        return mapper.map(userService.getById(userId), UserResponseDto.class);
     }
 
     @GetMapping
     public List<UserResponseDto> getAll() {
-        List<User> users = userService.listUsers();
-        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
-        for (User user: users) {
-            userResponseDtoList.add(convertToDto(user));
-        }
-        return userResponseDtoList;
+        return userService.listUsers().stream()
+                .map(user -> mapper.map(user, UserResponseDto.class))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/inject")
     public String injectUsers() {
-        return "Created users: "
-                + userService.add(new User("Roman", "Hreits", "roma@meta.ua"))
-                + " and " + userService.add(new User("Bob", "Bobby", "bob@gmail.com"));
-    }
-
-    private UserResponseDto convertToDto(User user) {
-        return mapper.map(user, UserResponseDto.class);
+        User roman = userService.add(new User("Roman", "Hreits", "roma@meta.ua"));
+        User bob = userService.add(new User("Bob", "Bobby", "bob@gmail.com"));
+        return "Created users: " + roman + " and " + bob;
     }
 }
