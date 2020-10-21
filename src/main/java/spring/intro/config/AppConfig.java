@@ -3,6 +3,7 @@ package spring.intro.config;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,6 @@ import spring.intro.model.User;
         "spring.intro.service"
 })
 public class AppConfig {
-
     private final Environment environment;
 
     public AppConfig(Environment environment) {
@@ -46,5 +46,10 @@ public class AppConfig {
         sessionFactory.setHibernateProperties(properties);
         sessionFactory.setAnnotatedClasses(User.class);
         return sessionFactory;
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }
